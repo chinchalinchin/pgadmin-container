@@ -8,9 +8,9 @@ The <i>.env</i> file configures environment variables necessary for this project
 
 In order for the application cluster to work, you will need to adjust <b>POSTGRES_HOST</b> (for containers, the host should be set equal to the name of the database service defined in the <i>docker-compose.yml</i>), <b>POSTGRES_USER</b>, <b>POSTGRES_PASSWORD</b>, <b>PGADMIN_DEFAULT_USER</b>, <b>PGADMIN_DEFAULT_EMAIL</b> and for each application whose database server you want to be able to see in <b>pgadmin</b>, you will need to adjust <b>_DB_NAME</b> (name of database), <b>_DB_USER</b> (user with permissions to access database) and <b>_DB_PASSWORD</b> (the password for the user just defined) variables. You can create more application database connections by adding them to the <i>.env</i> file and then adding those environment variables to the arrays defined in the BASH entrypoint script <i>entrypoint.sh</i>. Specifically, add your newly created database variables to lines 7 - 9,
 
-> dbs=($CCDA_DB_NAME $SOLUTIONID_DB_NAME $CALC_DB_NAME) <br>
-> users=($CCDA_DB_USER $SOLUTIONID_DB_USER $CALC_DB_USER) <br>
-> passwords=($CCDA_DB_PASSWORD $SOLUTIONID_DB_PASSWORD $CALC_DB_PASSWORD)<br>
+> dbs=($FIRST_DB_NAME $SECOND_DB_NAME $THIRD_DB_NAME) <br>
+> users=($FIRST_DB_USER $SECOND_DB_USER $THIRD_DB_USER) <br>
+> passwords=($FIRST_DB_PASSWORD $SECOND_DB_PASSWORD $THIRD_DB_PASSWORD)<br>
 
 To start the application, from the project root execute,
 
