@@ -1,0 +1,14 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "Digital Experience Databases",
+            "Group": "SolutionID & Pricing",
+            "Port": "__port__",
+            "Username": "__username__",
+            "Host": "__host__",
+            "SSLMode": "prefer",
+            "MaintenanceDB": "postgres",
+            "PassFile": "/servers/servers.json"
+        }
+    }
+}

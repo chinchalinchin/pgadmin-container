@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  pgadmin:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 5050:80
+    links:
+      - database
+    depends_on: 
+      - database
+    volumes:
+       - pgadmin:/root/.pgadmin
+    env_file:
+       - ./.env
+
+  database:
+    image: postgres:latest
+    restart: always
+    ports: 
+        - 5432:5432
+    volumes:
+      - postgres:/data/postgres
+    env_file:
+      - ./.env
+    tty: true
+
+volumes:
+  postgres:
+  pgadmin:
