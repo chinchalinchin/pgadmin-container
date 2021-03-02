@@ -4,6 +4,7 @@
 # DATABASE INITIALIZATION
 #########################
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SCRIPT_NAME="entrypoint"
 
 source "$SCRIPT_DIR/util.sh"
 
@@ -11,8 +12,7 @@ dbs=($FIRST_DB_NAME $SECOND_DB_NAME $THIRD_DB_NAME)
 users=($FIRST_DB_USER $SECOND_DB_USER $THIRD_DB_USER)
 passwords=($FIRST_DB_PASSWORD $SECOND_DB_PASSWORD $THIRD_DB_PASSWORD)
 
-nl=$'\n'
-wait-for-it database:5432 -- log "Postgres service ready to accept connections" 
+$SCRIPT_DIR/wait-for-it.sh database:5432 -- log "Postgres service ready to accept connections" $SCRIPT_NAME
 
 if [ ! -f "/credentials/pgpassfile" ]
 then
@@ -26,39 +26,39 @@ do
 
     if [ "$exists" == 0 ]
     then
-        echo "NOTE: $i Database Already Exists, Skipping Creation"
+        log "NOTE: $i Database already exists, skipping creation" $SCRIPT_NAME
     else
         db_index="$(get_db_index $i)"
         user=${users[$db_index]}
         password=${passwords[$db_index]}
 
-        echo "-------------------------"
-        echo "$i Database Configuration"
-        echo "-------------------------"
+        print_line
+        log "\e[1m$i\e[0m Database Configuration" $SCRIPT_NAME
 
-        echo "Creating Database: $i"
+        print_line 
+        log "Creating database \e[1m$i\e[0m" $SCRIPT_NAME
         CREATE_CMD="CREATE DATABASE $i;"
         execute_sql "$CREATE_CMD"
 
-        echo "Creating User : $user"
+        log "Creating user : \e[1m$user\e[0m" $SCRIPT_NAME
         USER_CMD="CREATE USER $user WITH ENCRYPTED PASSWORD '$password';"
         execute_sql "$USER_CMD"
 
-        echo "Granting User : $user All Privileges On Database : $i"
+        log "Granting User : \e[1m$user\e[0m All Privileges On Database : $i" $SCRIPT_NAME
         GRANT_CMD="GRANT ALL PRIVILEGES ON DATABASE $i TO $user;"
         execute_sql "$GRANT_CMD"
 
-        echo "Configuring PGPASSFILE for User $user on Database $i"
+        log "Configuring PGPASSFILE for User \e[1m$user\e[0m on Database \e[1m$i\e[0m" $SCRIPT_NAME
         echo "$POSTGRES_HOST:$POSTGRES_PORT:$i:$user:$password ${nl}" >> /credentials/pgpassfile
     fi
     
 done
-echo "-------------------------"
+print_line
 
-echo "Configuring PGAdmin4's servers.json With Secret Admin Credential"
-sed -i "s/__username__/$POSTGRES_USER/g" /servers/servers.json
-sed -i "s/__host__/$POSTGRES_HOST/g" /servers/servers.json
-sed -i "s/__port__/$POSTGRES_PORT/g" /servers/servers.json
+log "Configuring \e[2mpgdmin4\e[0m's \e[3mservers.json\e[0m With environment secrets" $SCRIPT_NAME
+sed -i "s/__username__/$POSTGRES_USER/g" $PGADMIN_SERVER_JSON_FILE
+sed -i "s/__host__/$POSTGRES_HOST/g" $PGADMIN_SERVER_JSON_FILE
+sed -i "s/__port__/$POSTGRES_PORT/g" $PGADMIN_SERVER_JSON_FILE
 
 
 ##################################

@@ -1,14 +1,15 @@
 FROM dpage/pgadmin4:latest
 
 USER root
-RUN apk update -f && apk upgrade -f && apk add bash wait-for-it
-
 WORKDIR /pgadmin4
-RUN mkdir /credentials && mkdir /servers && touch /credentials/pgpassfile
-COPY /conf/servers.json /servers/servers.json
-COPY /scripts/entrypoint.sh /entrypoint.sh
-COPY /scripts/util.sh /util.sh
-RUN chown -R pgadmin /servers /credentials /entrypoint.sh /util.sh
+RUN apk update -f && apk upgrade -f && apk add bash wget && \
+    wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh &&\
+    chown pgadmin:pgadmin /pgadmin4/wait-for-it.sh && chmod 700 /pgadmin4/wait-for-it.sh
+
+RUN mkdir /credentials && touch /credentials/pgpassfile && mkdir /pgadmin4/servers
+COPY /conf/servers.json /pgadmin4/servers/servers.json
+COPY /scripts /pgadmin4
+RUN chown -R pgadmin:pgadmin /pgadmin4/ /credentials/
 
 USER pgadmin
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/pgadmin4/entrypoint.sh"]
