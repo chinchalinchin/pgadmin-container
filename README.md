@@ -19,7 +19,7 @@ To start the application, from the project root execute,
 A <b>pgadmin</b> server will then be available at <i>localhost:5050</i>. You will need to login with the credentials defined in the PGADMIN_DEFAULT_EMAIL and PGADMIN_DEFAULT_PASSWORD. If you can't login with the username/password combo defined in the <i>.env</i> file, then you may need to delete the <b>pgadmin</b> volume and recreate it. [See the following stack for more information](
 https://stackoverflow.com/questions/65629281/pgadmin-docker-error-incorect-username-or-password)
 
-The database credentials in the environment variables are injected into <b>PGPASSFILE</b> credential file., which is turn is injected into the <b>PGADMIN_SERVER_JSON_FILE</b> server configuration. After logging in with the <b>PGADMIN_DEFAULT_USER</b> and <b>PGADMIN_DEFAULT_EMAIL</b>, you should not need to log into the databases themselves. For this reason, be extremely careful with deploying this application.
+The database credentials in the environment variables are injected into <b>PGPASSFILE</b> credential fil, which is turn is injected into the <b>PGADMIN_SERVER_JSON_FILE</b> server configuration. After logging in with the <b>PGADMIN_DEFAULT_USER</b> and <b>PGADMIN_DEFAULT_EMAIL</b>, you should not need to log into the databases themselves. For this reason, be extremely careful with deploying this application. This setup is solely for ease of local development. Do not use this configuration in production without changing the <b>PGPASSFILE</b> injection process.
  
 # Useful Links
 
