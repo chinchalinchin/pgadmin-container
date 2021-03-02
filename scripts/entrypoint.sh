@@ -60,12 +60,8 @@ done
 print_line
 
 log "Configuring \e[2mpgdmin4\e[0m's \e[3mservers.json\e[0m With environment secrets" $SCRIPT_NAME
-envsubst '$POSTGRES_USER,$POSTGRES_PORT,$POSTGRES_HOST,$PGPASSFILE' < $PGADMIN_SERVER_JSON_FILE | sponge $PGADMIN_SERVER_JSON_FILE
-# sed -i "s/__username__/$POSTGRES_USER/g" $PGADMIN_SERVER_JSON_FILE
-# sed -i "s/__host__/$POSTGRES_HOST/g" $PGADMIN_SERVER_JSON_FILE
-# sed -i "s/__port__/$POSTGRES_PORT/g" $PGADMIN_SERVER_JSON_FILE
-# sed -i "s/__pass__/$PGPASSFILE/g" $PGADMIN_SERVER_JSON_FILE
-
+SUBSTR='$POSTGRES_USER,$POSTGRES_PORT,$POSTGRES_HOST,$PGPASSFILE,$GROUP_NAME,$SERVER_NAME'
+envsubst $SUBSTR < $PGADMIN_SERVER_JSON_FILE | sponge $PGADMIN_SERVER_JSON_FILE
 
 ##################################
 # START DEFAULT PGADMIN ENTRYPOINT

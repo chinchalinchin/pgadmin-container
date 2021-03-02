@@ -1,8 +1,8 @@
 {
     "Servers": {
         "1": {
-            "Name": "Digital Experience Databases",
-            "Group": "SolutionID & Pricing",
+            "Name": "$SERVER_NAME",
+            "Group": "$GROUP_NAME",
             "Port": "$POSTGRES_PORT",
             "Username": "$POSTGRES_USER",
             "Host": "$POSTGRES_HOST",
