@@ -15,7 +15,6 @@ function clean_docker(){
 }
 
 function execute_sql(){
-    log "PGPASSWORD=xxxx psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER" "execute_sql"
     PGPASSWORD=$POSTGRES_PASSWORD psql --host=$POSTGRES_HOST --port=$POSTGRES_PORT --username=$POSTGRES_USER --command="$1"
 }
 

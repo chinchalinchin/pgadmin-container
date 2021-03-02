@@ -2,7 +2,7 @@ FROM dpage/pgadmin4:latest
 
 USER root
 WORKDIR /pgadmin4
-RUN apk update -f && apk upgrade -f && apk add bash wget && \
+RUN apk update -f && apk upgrade -f && apk add bash wget gettext moreutils && \
     wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh &&\
     chown pgadmin:pgadmin /pgadmin4/wait-for-it.sh && chmod 700 /pgadmin4/wait-for-it.sh
 
