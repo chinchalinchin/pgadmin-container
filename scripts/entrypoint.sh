@@ -3,41 +3,16 @@
 #########################
 # DATABASE INITIALIZATION
 #########################
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+source "$SCRIPT_DIR/util.sh"
 
 dbs=($FIRST_DB_NAME $SECOND_DB_NAME $THIRD_DB_NAME)
 users=($FIRST_DB_USER $SECOND_DB_USER $THIRD_DB_USER)
 passwords=($FIRST_DB_PASSWORD $SECOND_DB_PASSWORD $THIRD_DB_PASSWORD)
 
-
-function get_db_index(){
-    for i in "${!dbs[@]}"
-    do 
-        if [[ "${dbs[$i]}" = "$1" ]]
-        then
-            echo "${i}"
-        fi 
-    done
-}
-
-function execute_sql(){
-    PGPASSWORD=$POSTGRES_PASSWORD psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER -c "$1"
-}
-
-function list_databases(){
-    PGPASSWORD=$POSTGRES_PASSWORD psql -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER -lqt
-}
-
-function database_exists(){
-    if list_databases | cut -d \| -f 1 | grep -qw "$1" 
-    then
-        echo 0
-    else
-        echo 1
-    fi
-}
-
 nl=$'\n'
-sleep 5s
+wait-for-it database:5432 -- log "Postgres service ready to accept connections" 
 
 if [ ! -f "/credentials/pgpassfile" ]
 then
@@ -80,7 +55,7 @@ do
 done
 echo "-------------------------"
 
-echo "Configuring PGAdmin4's servers.json With Secret Credentials"
+echo "Configuring PGAdmin4's servers.json With Secret Admin Credential"
 sed -i "s/__username__/$POSTGRES_USER/g" /servers/servers.json
 sed -i "s/__host__/$POSTGRES_HOST/g" /servers/servers.json
 sed -i "s/__port__/$POSTGRES_PORT/g" /servers/servers.json
