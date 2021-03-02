@@ -6,7 +6,7 @@ Copy the <i>.sample.env</i> file into a new <i>.env</i> file,
 
 The <i>.env</i> file configures environment variables necessary for this project to work. For more information on the <b>pgadmin</b> environment variables, see [here](https://www.pgadmin.org/docs/pgadmin4/development/container_deployment.html). For more information on the <b>postgres</b> environment variables, see [here](https://hub.docker.com/_/postgres) 
 
-In order for the application cluster to work, you will need to adjust <b>POSTGRES_HOST</b> (for containers, the host should be set equal to the name of the database service defined in the <i>docker-compose.yml</i>), <b>POSTGRES_USER</b>, <b>POSTGRES_PASSWORD</b>, <b>PGADMIN_DEFAULT_USER</b>, <b>PGADMIN_DEFAULT_EMAIL</b> and for each application whose database server you want to be able to see in <b>pgadmin</b>, you will need to adjust <b>_DB_NAME</b> (name of database), <b>_DB_USER</b> (user with permissions to access database) and <b>_DB_PASSWORD</b> (the password for the user just defined) variables. You can create more application database connections by adding them to the <i>.env</i> file and then adding those environment variables to the arrays defined in the BASH entrypoint script <i>entrypoint.sh</i>. Specifically, add your newly created database variables to lines 7 - 9,
+In order for the application cluster to work, you will need to adjust <b>POSTGRES_HOST</b> (for containers, the host should be set equal to the name of the database service defined in the <i>docker-compose.yml</i>), <b>POSTGRES_USER</b>, <b>POSTGRES_PASSWORD</b>, <b>PGADMIN_DEFAULT_USER</b>, <b>PGADMIN_DEFAULT_EMAIL</b> and for each application whose database server you want to be able to see in <b>pgadmin</b>, you will need to adjust <b>_DB_NAME</b> (name of database), <b>_DB_USER</b> (user with permissions to access database) and <b>_DB_PASSWORD</b> (the password for the user just defined) variables. You can create more application database connections by adding them to the <i>.env</i> file and then adding those environment variables to the arrays defined in the BASH entrypoint script <i>entrypoint.sh</i>. Specifically, add your newly created database variables to lines 11 - 13,
 
 > dbs=($FIRST_DB_NAME $SECOND_DB_NAME $THIRD_DB_NAME) <br>
 > users=($FIRST_DB_USER $SECOND_DB_USER $THIRD_DB_USER) <br>
@@ -20,12 +20,6 @@ A <b>pgadmin</b> server will then be available at <i>localhost:5050</i>. You wil
 
 If you can't login with the username/password combo defined in the <i>.env</i> file, then you may need to delete the <b>pgadmin</b> volume and recreate it. [See the following stack for more information](
 https://stackoverflow.com/questions/65629281/pgadmin-docker-error-incorect-username-or-password)
-
-# Tips
-
-If you need to launch the application fresh, i.e. recreate the pgadmin and postgres configuration databases, recreate databases, etc, then you need to make sure you wipe the Docker volumes mounted through the <i>docker-compose.yml</i>; <i>docker-compose down</i> is not sufficient. You can use the <i>/scripts/detonate.sh</i> to purge your local Docker of all traces of this application. After invoking the script, the next <i>docker-compose up</i> will recreate the images, volumes and network. 
-
-This is especially important if you happen to change the <b>PGADMIN_DEFAULT_EMAIL</b> and <b>PGADMIN_DEFAULT_PASSWORD</b>, as the retained volumes will persist the old values of these environment variables until the volume is pruned.
 
 # Useful Links
 

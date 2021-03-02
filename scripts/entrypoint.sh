@@ -17,8 +17,11 @@ $SCRIPT_DIR/wait-for-it.sh database:5432 -- log "Postgres service ready to accep
 if [ ! -f "/credentials/pgpassfile" ]
 then
     touch /credentials/pgpassfile
-    echo "$POSTGRES_HOST:$POSTGRES_PORT:*:$POSTGRES_USER:$POSTGRES_PASSWORD ${nl}" >> /credentials/pgpassfile
+else
+    > /credentials/pgpassfile
 fi
+echo "$POSTGRES_HOST:$POSTGRES_PORT:*:$POSTGRES_USER:$POSTGRES_PASSWORD ${nl}" >> /credentials/pgpassfile
+
 
 for i in ${dbs[@]}
 do

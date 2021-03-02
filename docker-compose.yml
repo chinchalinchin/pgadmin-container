@@ -12,7 +12,7 @@ services:
     depends_on: 
       - database
     volumes:
-       - pgadmin:/root/.pgadmin
+       - pgadmin:/root/pgadmin
     env_file:
        - ./.env
 
