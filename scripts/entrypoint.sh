@@ -12,7 +12,8 @@ dbs=($FIRST_DB_NAME $SECOND_DB_NAME $THIRD_DB_NAME)
 users=($FIRST_DB_USER $SECOND_DB_USER $THIRD_DB_USER)
 passwords=($FIRST_DB_PASSWORD $SECOND_DB_PASSWORD $THIRD_DB_PASSWORD)
 
-$SCRIPT_DIR/wait-for-it.sh database:5432 -- log "Postgres service ready to accept connections" $SCRIPT_NAME
+$SCRIPT_DIR/wait-for-it.sh database:5432
+log "Postgres service ready to accept connections" $SCRIPT_NAME
 
 if [ ! -f "/credentials/pgpassfile" ]
 then
